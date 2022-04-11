@@ -1,0 +1,98 @@
+NETFLIX DESIGN
+
+I: Interviewer
+C: Candidate
+
+I: Design Netflix
+
+C: - There are many services working on netflix, which services to build ? like authentication, CRUD profile, payments, streaming videos, static content services, recommendation engine, logging
+I : - We will be building
+	- core user flow (streaming) - globally available, High availability, fast latenacies
+
+C - What will be the count of Users to be buiilt for 
+I: 200 MN
+
+C - Structure data need for services to be built
+	- Video
+	- logs
+	- user metadata
+	- static content
+
+C - What we could estimate for data storage ?
+I - 10k 
+
+
+C - What resolutions to be built for video stream ?
+I - SD, DH
+
+C :- Let's keep 
+	SD - 10 GB/hr
+	HD - 20 GB/hr
+
+Total Streaming Data Transfer (GB/hr) - 30 GB/hr
+No of Videos = 10000
+All movies Streaming in an hour - 30*10000 = 300K GB/hr OR 300TB/hr
+
+
+C - Let's select Video Storage
+	-	AWS S3
+
+C - Let's select Static Content (User Meta Data)
+	-	Key Value Db (Dynamodb)
+
+	200 Mn users meta data
+		- like user information
+		- recently watched
+		- how much watched
+		- movie information (cast, release data)
+		- 1000 videos / user
+
+		- All above information will take 100 bytes / video
+		- 100 bytes * 1000 = 100Kb/user
+		- 200 * 100 Kb = 20*100Kb = 20 TB
+
+	- So, total 20 TB will be consumed in static content
+
+C - Let's assume 5% of users to be active at same time - 10 Mn users
+	-	10Mn users watching in HD - 20GB/s
+	- Seconds in an hour = 4000(approx in an hour)
+	- Bandwidth = 20Gb/s / 4000 = 5 Mb/s
+	Streaming Capacity per second - 10 Mn * 5Mb/s = 50Tb/s
+
+	- To manage this amount of streaming , we need multiple CDN points to manage it
+
+	- We need caching layer to make it available locally as well as globally
+
+I - Yes that's correct
+
+C - We need some cache layer between S3 and CDN - 
+	cache populator (services) - like elastic cache
+
+I - Netflix in reallife, solves cache issue by partnering with ISP's directly called IXP's which is called optimised CDN
+
+C - Ohh that's good to know
+
+C - To serve user meta data using API servers
+	-	Use Round Robin Load balancing
+	- As metadata is just 20TB we can store in memory caching on servers (like redis)
+
+I - How will be logging ?
+
+C - How to/Where store logs ?
+	Structure of logs ?
+	How to implement map-reduce on logs
+
+	Store logs in distributed system. Like HDFS (Hadoop File System)
+	S - userid, logID, eventType, region, etc
+
+	Map System take logs structure S and aggregate the logs based on userId - output - userId
+	Assuming using ML models, reduce - userId - [(vid1, pause), (vidid2, play)]
+
+
+
+
+
+
+
+
+

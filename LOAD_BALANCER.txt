@@ -1,0 +1,37 @@
+Load balancer
+
+- Load balancers minimize server response time and maximize throughput.
+- Load balancer ensures high availability and reliability by sending requests only to online servers
+- Load balancers do continuous health checks to monitor the server’s capability of handling the request.
+- Depending on the number of requests or demand load balancer add or remove the number of servers.
+
+Types of LB -
+
+- External LB
+- Internal LB
+
+- Software Load Balancers in Clients
+- Software Load Balancers in Services
+- Hardware Load Balancers
+
+
+Where can we put LBs ?
+
+- In between the client application/user and the server
+- In between the server and the application/job servers
+- In between the application servers and the cache servers
+- In between the cache servers the database servers
+
+Categories of LB ?
+
+- Layer 4 / Network Load Balancing
+- Layer 7 / Application Load Balancer or HTTP(S) Load Balancer
+- Global Server Load Balancing (GSLB)
+
+What are Load Balancing Algorithms ?
+
+- Round Robin - Requests are distributed across the servers ina sequential or rotational manner. For example, the first request goes to the first 				  server, the second one goes to the second server, the third request goes to the third server and it continues further for all the 				requests. It is easy to implement but it doesn’t consider the load already on a server so there is a risk that one of the servers 				  receives a lot of requests and becomes overloaded.
+- Weighted Round Robin - It is much similar to the round-robin technique. The only difference is, each of the resources in a list is provided a 						 weighted score. Depending on the weighted score the request is distributed to these servers. So in this method, some of 						  the servers get a bigger share of the overall request. 
+- Least Connection Method - In this method, the request will be directed to the server with the fewest number of requests or active connections.
+- Least Response Time Method - This technique is more sophisticated than the Least connection method.  In this method, the request is forwarded 							   to the server with fewest active connections and the least average response time. The response time taken by the 							   server represents the load on the server and the overall expected user experience.
+- Source IP Hash - In this method, the request is sent to the server based on the client’s IP address. The IP address of the client and the 					   receiving compute instance are computed with a cryptographic algorithm.

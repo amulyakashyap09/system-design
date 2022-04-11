@@ -1,0 +1,61 @@
+Autocomplete/Type-ahead System
+
+Functional Requirements
+
+-	The service should return a list of, say, 3 top suggestions, based on what the user types in the search box.
+-	The suggestions are ordered according to the frequency and recency of their appearance in user searches.
+
+
+Non-Functional Requirements
+
+-	The service should be able to deliver the suggestions in real-time, as the user types in the query. This means that the latency should be very low.
+-	The system should be able to scale to a large number of requests without any degradation in performance.
+-	The system should be highly available.
+
+Capacity Constraints Of The System
+
+-	Google receives around 5 billion queries per day
+-	Assuming about 30% of these queries are unique, this amounts to about 1.5 billion unique queries per day
+-	If each query comprises 15 characters on average each character takes 2 bytes of storage, you’ll need 45GB to store the queries made in a day.
+
+Choice Of Data Structure - Trie
+
+-	The system involves the storage of a large number of strings
+-	What the user enters into the search box is taken by the autocomplete system as an input prefix.
+-	This prefix is matched against the strings stored in the database and the most closely related, recent and popular matches are returned to the user.
+-	The database will be queried several times each second and the system must return the response with minimum latency
+-	The indexes need to be stored in a database that can be scanned quickly to retrieve strings to return to the querying user.
+-	A trie is a tree-like data structure that stores phrases in the form of a tree. Each node carries a character from the phrase in the order that it appears in the word.
+
+Optimise Trie
+
+-	Tracking Top Searches ["a:1", "amu:2", "honey:22", "run:55"]
+	- Keep count of top searches and sort the structure by rank and give the result
+-	Reducing Latency In Traversing The Trie
+	- To optimised , keep top 3 suggesstion for every prefix of the node
+		- [["be", "bel", "belt"], ["ho", "hon", "honey"]]
+
+High Availability & Scalibility - Apache Zookeeper
+
+-	Trie in Single Server will fail if goes down
+-	To increase availability and reliability of the system, the trie will be replicated across multiple servers
+-	if one server goes down, or is overloaded with requests, the other nodes that carry the same information can continue serving the requests. 	Replicating the information across multiple nodes also makes the system reliable since even if a node is lost, the autocomplete information is not lost and can be accessed from the other storage servers
+-	The replicated instances of trie can be stored in Apache Zookeeper
+-	Zookeeper is a good choice for storage since it is highly available and can effectively serve high volumes of reads and some writes. You can also use a different distributed database, such as Cassandra for the purpose.
+
+
+Splitting Trie Into Multiple Nodes
+
+-	Storing all these phrases in a single trie is not ideal for availability, scalability or durability of the system
+-	A better solution is to split trie across multiple servers for a durable system and better user experience.
+	- Server 1 - a - k
+	- Server 2 - l - q
+	- Server 3 - s - z
+
+Architecture
+
+-	Update new keywords -	Client -> gateway ->Collect Phrases->LB->Aggregator->Cassandra->Applier->Zookeeper
+-	Retieve keywords	-	Client->gateway<->LB<->Zookeeper
+								  		  ||			
+								   [REDIS]Top Phrases
+

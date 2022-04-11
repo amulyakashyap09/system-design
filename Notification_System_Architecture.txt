@@ -1,0 +1,38 @@
+Notification System Architecture
+
+https://medium.com/interviewnoodle/notification-system-architecture-e0d98ab3d18
+
+The classification of the notification system
+
+-	Prohibition
+-	Warning
+-	Success
+
+Notification Process Flow Step
+
+- Message Trigger Time and Conditions (when and what)
+- Message Sender (who discovered the matter)
+- Message Recipient
+- Message Access Channel (how to find him)
+- Message Notification Content (tell him what)
+- Message Operation Feedback (what can he do) = read + operation feedback. Read-only, that is, the user does not need to do more operations after browsing
+
+The conditions of a good messaging notification system
+
+-	Comprehensive: The message notification can provide a better-updated content of the message completely and comprehensively
+-	Timely: The way to reach the user with the message should be timely and effective
+-	Efficient: To avoid excessive message intrusion to users by allowing to group messages based on the senders or group member senders into so that users can process messages without confusion.
+
+Design Patterns
+
+-	Observable
+-	Strategy
+-	Template
+-	Builder/Factory format
+
+Notification System Model
+-	Publish-Subscribe Pattern
+-	Pull-Based Approach
+-	3. Push-Based Approach
+
+
